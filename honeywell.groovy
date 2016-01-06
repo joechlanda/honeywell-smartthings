@@ -76,7 +76,7 @@ metadata {
         }
        valueTile("coolingSetpoint", "device.coolingSetpoint", inactiveLabel: false) 
     	  {
-          state "default", label:'Cool @${currentValue}°F', unit:"F",
+          state "default", label:'Cool ${currentValue}°F', unit:"F",
            backgroundColors:
            [
             [value: 31, color: "#153591"],
@@ -90,7 +90,7 @@ metadata {
         }
         valueTile("heatingSetpoint", "device.heatingSetpoint", inactiveLabel: false) 
     	{
-      state "default", label:'Heat @${currentValue}°F', unit:"F",
+      state "default", label:'Heat ${currentValue}°F', unit:"F",
        backgroundColors:
        [
         [value: 31, color: "#153591"],
@@ -401,12 +401,6 @@ log.debug "https://mytotalconnectcomfort.com/portal/Device/CheckDataSession/${se
         def statusHeat = response.data.latestData.uiData.StatusHeat
         def curHumidity = response.data.latestData.uiData.IndoorHumidity
         
-
-        log.trace("IndoorHumidity: ${response.data.latestData.uiData.IndoorHumidity}")
-        log.trace("IndoorHumiditySensorAvailable: ${response.data.latestData.uiData.IndoorHumiditySensorAvailable}")        
-        log.trace("IndoorHumiditySensorNotFault: ${response.data.latestData.uiData.IndoorHumiditySensorNotFault}")        
-        log.trace("IndoorHumidStatus: ${response.data.latestData.uiData.IndoorHumidStatus}")        
-
         //Operating State Section 
         //Set the operating state to off 
         
@@ -417,11 +411,10 @@ log.debug "https://mytotalconnectcomfort.com/portal/Device/CheckDataSession/${se
             operatingState = "cooling"
         } else if (statusHeat == 1 && switchPos == 1) {
             operatingState = "heating"
-           
-        } else {
-          	operatingState = "unknown"
         }
-        
+
+        log.trace("operatingState: ${operatingState}")
+
         //End Operating State
         
         log.debug curTemp
